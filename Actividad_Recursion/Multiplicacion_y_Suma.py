@@ -1,5 +1,5 @@
 
-
+print("Multiplicacion")
 def multiplicar (a,b):
     if b == 1:
       return a 
@@ -7,9 +7,10 @@ def multiplicar (a,b):
 
 print("El resultado es:", multiplicar(3, 2))
 
-def divide(a, b, precision=10):
+
+print("Division")
+def divide(a,b):
     if a < b:
-        if precision == 0:
-            return 0
-        return 0.1 * divide(a * 10, b, precision - 1)
-    return 1 + divide(a - b, b, precision)
+        return 0
+    return 1 + divide(a-b,b)
+print("El resultado es:", divide(6, 2))
