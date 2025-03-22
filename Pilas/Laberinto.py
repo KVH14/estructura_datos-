@@ -1,7 +1,7 @@
 # Resolver un laberinto usando una pila (estructura tipo stack)
 
 # Definición del laberinto (0 = camino, 1 = pared)
-laberinto = [
+laberinto: list[list[int]] = [
     [0, 1, 0, 0, 0],
     [0, 1, 0, 1, 0],
     [0, 0, 0, 1, 0],
@@ -10,31 +10,32 @@ laberinto = [
 ]
 
 # Definir punto de inicio y punto de llegada
-inicio = (0, 0)
-fin = (4, 4)
+inicio: tuple[int, int] = (0, 0)
+fin: tuple[int, int] = (4, 4)
 
 # Dimensiones del laberinto
-filas = len(laberinto)
-columnas = len(laberinto[0])
+filas: int = len(laberinto)
+columnas: int = len(laberinto[0])
 
 # Movimientos posibles: Derecha, Abajo, Izquierda, Arriba
-movimientos = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+movimientos: list[tuple[int, int]] = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 # Implementación de la resolución del laberinto utilizando una pila
-def resolver_laberinto(laberinto, inicio, fin):
+def resolver_laberinto(laberinto: list[list[int]], inicio: tuple[int, int], fin: tuple[int, int]) -> list[tuple[int, int]] | None:
+    """
+    Resuelve un laberinto utilizando una pila (backtracking).
     
-    # Resuelve un laberinto utilizando una pila (backtracking).
+    Parámetros:
+    - laberinto (list[list[int]]): Lista de listas de enteros (0 = camino, 1 = pared).
+    - inicio (tuple[int, int]): Tupla con la posición inicial (fila, columna).
+    - fin (tuple[int, int]): Tupla con la posición final (fila, columna).
     
-    # Parámetros:
-    # - laberinto: Lista de listas de enteros (0 = camino, 1 = pared).
-    # - inicio: Tupla con la posición inicial (fila, columna).
-    # - fin: Tupla con la posición final (fila, columna).
+    Retorna:
+    - Una lista con el camino desde inicio hasta fin, o None si no hay solución.
+    """
     
-    # Retorna:
-    # - Una lista con el camino desde inicio hasta fin, o None si no hay solución.
-
-    pila = [inicio]  # Inicializar la pila con el punto de inicio
-    visitado = set()  # Conjunto para rastrear posiciones visitadas
+    pila: list[tuple[int, int]] = [inicio]  # Inicializar la pila con el punto de inicio
+    visitado: set[tuple[int, int]] = set()  # Conjunto para rastrear posiciones visitadas
     
     while pila:
         x, y = pila[-1]  # Obtener la última posición en la pila
@@ -44,7 +45,7 @@ def resolver_laberinto(laberinto, inicio, fin):
         
         visitado.add((x, y))  # Marcar la posición como visitada
         
-        camino_encontrado = False  # Bandera para verificar si hay movimientos válidos
+        camino_encontrado: bool = False  # Bandera para verificar si hay movimientos válidos
         
         for dx, dy in movimientos:
             nx, ny = x + dx, y + dy  # Nueva posición a evaluar
@@ -61,7 +62,7 @@ def resolver_laberinto(laberinto, inicio, fin):
     return None  # No se encontró un camino válido
 
 # Llamar a la función para resolver el laberinto
-trayectoria = resolver_laberinto(laberinto, inicio, fin)
+trayectoria: list[tuple[int, int]] | None = resolver_laberinto(laberinto, inicio, fin)
 
 # Imprimir el resultado
 if trayectoria:
