@@ -1,13 +1,11 @@
 def Balanceo_Simbolos(expresion: str) -> str:
     """Verifica si una expresión tiene los símbolos balanceados.
-
     Args:
         expresion (str): Expresión a evaluar.
 
     Returns:
         str: Mensaje indicando si la expresión está balanceada o detallando el error.
     """
-
     # Diccionario de pares de símbolos de apertura y cierre
     pares: dict[str, str] = {'(': ')', '[': ']', '{': '}'}
 
