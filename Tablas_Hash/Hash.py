@@ -5,20 +5,7 @@ class TablaHashLibreta:
         self.tabla = [] 
         self.contador = 0
 
-    # Agrega un nuevo contacto a la tabla
-    def agregar(self, clave: str, valor: str):
-        if self.contador < self.tamaño:
-            hash_clave = hash(clave)  # Calcula el hash de la clave
-            self.tabla[self.contador] = (clave, valor, hash_clave)
-            print(f"\nContacto agregado:")
-            print(f"   Nombre  : {clave}")
-            print(f"   Teléfono: {valor}")
-            print(f"   Hash    : {hash_clave}")
-            print(f"   Índice  : {self.contador}")
-            self.contador += 1
-        else:
-            print("No hay espacio en la tabla para agregar más contactos.")
-
+    # Agrega un nuevo contacto a la tabla0
     # Muestra todos los contactos en la tabla
     def mostrar(self):
         print("\nDirectorio Telefónico:")
