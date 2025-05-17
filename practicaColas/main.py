@@ -15,18 +15,7 @@ ticketTypes = {
     "otros"
 }
 
-# Endpoint para crear un turno
-# @app.post("/ticketCreateBatch") 
-# #POST en la ruta "/ticketCreateBatch"
-# def crear_turnos_batch(turnos: List[Ticket]):
-#     #Funcion para crear turnos en batch donde se recibe una lista de turnos donde el usuario enviará varios tickets en una sola solicitud
-#     for turno in turnos:
-#     #Recorre uno por uno los tickets de la lista turnos
-#         add_queue(turno, ticketTypes)
-#         # Agregar cada ticket a la cola
-#     return {"mensaje": "Tickets agregados correctamente", "total": len(turnos)}
 
-#     # Aquí podrías agregar la lógica para guardar el turno en una base de datos
 
 @app.post("/ticketCreateBatch")
 def crear_turnos_batch(turnos: List[Ticket]):
