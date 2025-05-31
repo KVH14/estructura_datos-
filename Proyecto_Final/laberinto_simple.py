@@ -13,17 +13,13 @@ class LaberintoSimple:
     def __init__(self, filas, columnas, nivel):
         self.filas = filas
         self.columnas = columnas
-        self.nivel = nivel
-        random.seed(nivel * 42)  # Semilla reproducible
-        
+        self.nivel = nivel        
         # Inicializar laberinto con todas las paredes
         # True = hay pared, False = no hay pared
         # Índices: [fila][columna][dirección] donde dirección: 0=arriba, 1=abajo, 2=derecha, 3=izquierda
         self.paredes = [[[True for _ in range(4)] for _ in range(columnas)] for _ in range(filas)]
-        
         # Crear el laberinto
         self.crear_laberinto()
-        random.seed()  # Restaurar aleatoriedad
     
     def crear_laberinto(self): #Laberinto con DFS
 
@@ -36,7 +32,7 @@ class LaberintoSimple:
             vecinos = self.obtener_vecinos_no_visitados(fila_actual, col_actual, visitadas) # obtener vecinos no visitados
             
             if vecinos:
-                fila_vecino, col_vecino = random.choice(vecinos) # Elegir un vecino aleator
+                fila_vecino, col_vecino = random.choice(vecinos) # Elegir un vecino aleatoriamente
                 self.quitar_pared(fila_actual, col_actual, fila_vecino, col_vecino) # Quitar la pared entre la celda actual y el vecino
                 visitadas.add((fila_vecino, col_vecino)) # Marcar vecino como visitado y agregarlo a la pila
                 pila.append((fila_vecino, col_vecino))
