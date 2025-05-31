@@ -3,10 +3,6 @@ import random
 from tkinter import messagebox
 
 
-# Constantes
-TAM_CELDA = 25
-MARGEN = 20
-
 class LaberintoSimple:
     def __init__(self, filas, columnas, nivel):
         self.filas = filas
