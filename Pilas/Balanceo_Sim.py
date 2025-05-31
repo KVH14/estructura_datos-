@@ -18,7 +18,7 @@ class Pila:
     
     def desapilar(self):
         if self.esta_vacia():
-            return None, None
+            return None
         valor = self.tope.valor
         posicion = self.tope.posicion
         self.tope = self.tope.siguiente
@@ -50,15 +50,14 @@ def verificar_balanceo(expresion):
     
     return "La expresión está correctamente balanceada."
 
-# Mini menú para ingresar y verificar expresiones
+
 while True:
-    expresion = input("\nIngrese una expresión para verificar (o 'salir' para terminar): ").strip()
-    if expresion.lower() == 'salir':
-        print("¡Hasta luego!")
-        break
-    if not expresion:
-        print("Por favor ingrese una expresión válida.")
-        continue
-    
+    expresion = input("Ingrese una expresión para verificar (o 'salir' para terminar): ").strip()
     resultado = verificar_balanceo(expresion)
     print(resultado)
+    
+    if  resultado == 'salir':
+        print("¡Hasta luego!")
+        break
+
+    
