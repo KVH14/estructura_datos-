@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class AgenteInteligente:
-    """Agente que aprende a resolver laberintos usando Q-Learning mejorado"""
+
     
     def __init__(self, laberinto, nivel):
         self.laberinto = laberinto
@@ -20,7 +20,7 @@ class AgenteInteligente:
         self.episodios_exitosos = 0
     
     def calcular_recompensa(self, posicion_anterior, posicion_actual):
-        """Calcula la recompensa mejorada por moverse a una posición"""
+
         if posicion_actual == self.meta:
             return 100.0  # Gran recompensa por llegar a la meta
         
@@ -51,7 +51,7 @@ class AgenteInteligente:
        
 
     def mover(self, fila, col, accion):
-        """Ejecuta una acción y devuelve la nueva posición"""
+
         if not self.laberinto.puede_moverse(fila, col, accion):
             return (fila, col)  # No se puede mover, quedarse en el mismo lugar
         
@@ -67,7 +67,7 @@ class AgenteInteligente:
         return (fila, col)
     
     def entrenar(self):
-        """Entrena al agente para que aprenda a resolver el laberinto"""
+
         print(f"Iniciando entrenamiento de {self.episodios} episodios...")
         
         for episodio in range(self.episodios):
