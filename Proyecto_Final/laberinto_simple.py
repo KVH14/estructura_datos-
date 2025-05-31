@@ -8,8 +8,6 @@ TAM_CELDA = 25
 MARGEN = 20
 
 class LaberintoSimple:
-    """Genera laberintos usando un algoritmo simple de excavación"""
-    
     def __init__(self, filas, columnas, nivel):
         self.filas = filas
         self.columnas = columnas
@@ -61,7 +59,6 @@ class LaberintoSimple:
         return vecinos
     
     def quitar_pared(self, fila1, col1, fila2, col2):
-        """Quita la pared entre dos celdas adyacentes"""
         # Determinar la dirección
         if fila1 == fila2:  # Movimiento horizontal
             if col1 < col2:  # Movimiento hacia la derecha
@@ -79,7 +76,6 @@ class LaberintoSimple:
                 self.paredes[fila2][col2][1] = False  # Quitar pared abajo de celda2
     
     def ajustar_dificultad(self):
-        """Ajusta la dificultad del laberinto según el nivel"""
         if self.nivel <= 2:
             # Niveles fáciles: agregar algunos caminos extra
             num_caminos_extra = int(self.filas * self.columnas * 0.05)
@@ -109,7 +105,7 @@ class LaberintoSimple:
                 self.paredes[fila][col - 1][2] = False
     
     def puede_moverse(self, fila, col, direccion):
-        """Verifica si se puede mover en una dirección específica"""
+
         if direccion == 0:  # Arriba
             return not self.paredes[fila][col][0] and fila > 0
         elif direccion == 1:  # Abajo
@@ -121,7 +117,6 @@ class LaberintoSimple:
         return False
     
     def obtener_movimientos_posibles(self, fila, col):
-        """Obtiene todas las posiciones a las que se puede mover desde una celda"""
         movimientos = []
         
         if self.puede_moverse(fila, col, 0):  # Arriba
