@@ -10,7 +10,6 @@ class LaberintoSimple:
         self.nivel = nivel        
         # Inicializar laberinto con todas las paredes
         # True = hay pared, False = no hay pared
-        # Índices: [fila][columna][dirección] donde dirección: 0=arriba, 1=abajo, 2=derecha, 3=izquierda
         self.paredes = [[[True for _ in range(4)] for _ in range(columnas)] for _ in range(filas)]
         # Crear el laberinto
         self.crear_laberinto()
