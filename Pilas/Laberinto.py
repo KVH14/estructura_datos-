@@ -1,132 +1,100 @@
-class NodoPosicion:
-    """Clase que representa una posición en el laberinto con referencia al nodo anterior"""
-    def __init__(self, x: int, y: int, anterior=None):
-        self.x = x              # Coordenada x (fila)
-        self.y = y              # Coordenada y (columna)
-        self.anterior = anterior  # Referencia al nodo anterior en el camino
 
-class PilaLaberinto:
-    """Implementación de pila para el laberinto usando nodos"""
+class Nodo:
+    def __init__(self, fila, columna, anterior=None):
+        self.fila = fila            # Coordenada fila de la posición
+        self.columna = columna      # Coordenada columna de la posición
+        self.anterior = anterior    # Referencia al nodo anterior (camino recorrido)
+
+
+class Pila:
     def __init__(self):
-        self.tope = None  # Nodo en la cima de la pila
-        self.tamano = 0   # Tamaño actual de la pila
-    
-    def esta_vacia(self) -> bool:
-        """Verifica si la pila está vacía"""
-        return self.tope is None
-    
-    def apilar(self, x: int, y: int):
-        """Agrega una nueva posición a la pila"""
-        nuevo_nodo = NodoPosicion(x, y, self.tope)
-        self.tope = nuevo_nodo
-        self.tamano += 1
-    
-    def desapilar(self) -> tuple[int, int]:
-        """Elimina y devuelve la posición en el tope de la pila"""
-        if self.esta_vacia():
-            raise IndexError("La pila está vacía")
-        posicion = (self.tope.x, self.tope.y)
-        self.tope = self.tope.anterior
-        self.tamano -= 1
-        return posicion
-    
-    def ver_tope(self) -> tuple[int, int]:
-        """Devuelve la posición en el tope sin eliminarla"""
-        if self.esta_vacia():
-            raise IndexError("La pila está vacía")
-        return (self.tope.x, self.tope.y)
-    
-    def obtener_camino(self) -> list[tuple[int, int]]:
-        """Reconstruye el camino desde el tope hasta el inicio"""
-        camino = []
-        actual = self.tope
-        while actual is not None:
-            camino.append((actual.x, actual.y))
-            actual = actual.anterior
-        return camino[::-1]  # Invertir para que sea inicio -> fin
-
-def resolver_laberinto_con_nodos(laberinto: list[list[int]], 
-                                inicio: tuple[int, int], 
-                                fin: tuple[int, int]) -> list[tuple[int, int]] | None:
-    """
-    Resuelve un laberinto usando una pila implementada con nodos.
-    
-    Args:
-        laberinto: Matriz donde 0 es camino y 1 es pared
-        inicio: Tupla (fila, columna) de inicio
-        fin: Tupla (fila, columna) de destino
+        self.cima = None  # Referencia al nodo en la cima de la pila (el último apilado)
         
-    Returns:
-        Lista de tuplas con el camino o None si no hay solución
-    """
-    # Movimientos posibles (derecha, abajo, izquierda, arriba)
-    movimientos = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-    
-    # Inicializar pila con nodo de inicio
-    pila = PilaLaberinto()
-    pila.apilar(inicio[0], inicio[1])
-    
-    # Matriz para marcar posiciones visitadas
-    visitado = [[False for _ in range(len(laberinto[0]))] 
-               for _ in range(len(laberinto))]
-    visitado[inicio[0]][inicio[1]] = True
-    
+    def esta_vacia(self):
+        return self.cima is None
+
+    def apilar(self, fila, columna):
+        nuevo = Nodo(fila, columna, self.cima)# Crea un nuevo nodo con la posición actual y lo coloca en la cima
+        self.cima = nuevo
+
+    def desapilar(self):
+       
+        if self.esta_vacia(): # Quita y retorna el nodo en la cima de la pila, si no está vacía
+            return None  
+        actual = self.cima
+        self.cima = self.cima.anterior  # Actualiza la cima al nodo anterior
+        return actual  # Devuelve el nodo desapilado
+
+    def ver_cima(self):
+        return self.cima # Retorna el nodo en la cima de la pila sin desapilarlo
+
+    def camino_completo(self):
+        camino = [] # Devuelve la lista del camino desde el inicio hasta la posición actual
+        actual = self.cima
+        while actual:
+            camino.append((actual.fila, actual.columna))  # Añade la posición actual
+            actual = actual.anterior  # Avanza hacia el nodo anterior
+        return camino[::-1]  # Invierte la lista para que sea del inicio al fin
+
+
+def resolver_laberinto(laberinto, inicio, fin):
+    filas = len(laberinto)          
+    columnas = len(laberinto[0]) 
+    visitado = [[False]*columnas for _ in range(filas)] # Matriz para marcar las posiciones ya visitadas
+    pila = Pila()                 
+
+    # Movimientos posibles: derecha, abajo, izquierda, arriba
+    dx_dy = [(0,1), (1,0), (0,-1), (-1,0)]
+
+    fila_ini, col_ini = inicio     # Coordenadas de inicio
+    fila_fin, col_fin = fin        # Coordenadas de destino
+
+    pila.apilar(fila_ini, col_ini)    # Apilamos la posición inicial
+    visitado[fila_ini][col_ini] = True  # Marcamos como visitada
+
     while not pila.esta_vacia():
-        x, y = pila.ver_tope()
-        
-        # Verificar si llegamos al destino
-        if (x, y) == fin:
-            return pila.obtener_camino()
-        
-        # Buscar movimientos válidos
-        movimiento_valido = False
-        for dx, dy in movimientos:
-            nx, ny = x + dx, y + dy
-            
-            # Verificar si la nueva posición es válida
-            if 0 <= nx < len(laberinto) and (0 <= ny < len(laberinto[0])):
-                if laberinto[nx][ny] == 0 and not visitado[nx][ny]:
-                    pila.apilar(nx, ny)
-                    visitado[nx][ny] = True
-                    movimiento_valido = True
-                    break
-        
-        # Si no hay movimientos válidos, retroceder
-        if not movimiento_valido:
-            pila.desapilar()
+        actual = pila.ver_cima()     # Obtenemos la posición actual (cima de la pila)
+        f = actual.fila
+        c = actual.columna
+        if (f, c) == (fila_fin, col_fin): # Si llegamos a la posición final, devolvemos el camino completo
+            return pila.camino_completo()
+        # Revisamos todas las direcciones posibles
+        for dx, dy in dx_dy:
+            nuevafi, nuevaco = f + dx, c + dy  # Calculamos nueva fila y columna
     
-    return None  # No se encontró solución
+            if 0 <= nuevafi < filas and 0 <= nuevaco < columnas: # Verificamos que la nueva posición esté dentro del laberinto
+                # Verificamos que sea un camino (0) y no haya sido visitado
+                if laberinto[nuevafi][nuevaco] == 0 and not visitado[nuevafi][nuevaco]:
+                    pila.apilar(nuevafi, nuevaco)         # Apilamos la nueva posición
+                    visitado[nuevafi][nuevaco] = True     # Marcamos como visitada
+                    se_movio = True             # Indicamos que nos movimos
+                    break                      # Salimos del ciclo para explorar desde la nueva posición
 
-# Definición del laberinto (0 = camino, 1 = pared)
+        # Si no hubo movimiento, significa que estamos en callejón sin salida
+        if not se_movio:
+            pila.desapilar()  # Retrocedemos quitando la posición actual
+
+    return None  # No se encontró camino al final del laberinto
+
+# Ejemplo de laberinto (0 = camino libre, 1 = pared)
 laberinto = [
-    [0, 1, 0, 0, 0],
-    [0, 1, 0, 1, 0],
-    [0, 0, 0, 1, 0],
-    [0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0]
+    [0, 1, 0, 0],
+    [0, 1, 0, 1],
+    [0, 0, 0, 1],
+    [1, 1, 0, 0]
 ]
 
-# Puntos de inicio y fin
-inicio = (0, 0)
-fin = (4, 4)
+inicio = (0, 0)  # Punto de inicio en la esquina superior izquierda
+fin = (3, 3)     # Punto final en la esquina inferior derecha
 
 # Resolver el laberinto
-solucion = resolver_laberinto_con_nodos(laberinto, inicio, fin)
+camino = resolver_laberinto(laberinto, inicio, fin)
 
-# Mostrar resultados
-if solucion:
+# Mostrar resultado
+if camino:
     print("Camino encontrado:")
-    for paso in solucion:
-        print(f"-> ({paso[0]}, {paso[1]})", end=" ")
-    print("\nRepresentación gráfica:")
-    
-    # Mostrar laberinto con el camino marcado
-    for i in range(len(laberinto)):
-        for j in range(len(laberinto[0])):
-            if (i, j) in solucion:
-                print("X", end=" ")  # Marcar el camino
-            else:
-                print(laberinto[i][j], end=" ")
-        print()
+    for paso in camino:
+        print(f"({paso[0]}, {paso[1]})", end=" ")
 else:
-    print("No se encontró solución para el laberinto")
+    print("No hay solución.")
+
